@@ -1,0 +1,135 @@
+.hotel-detail-column {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+  }
+  
+  /* Remove extra left and right margins, due to padding */
+  .hotel-detail {
+      /* background-color: yellow; */
+    }
+  
+  /* Clear floats after the columns */
+  .hotel-detail:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  
+  
+  /* Style the counter cards */
+  .hotel-detail-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    text-align: center;
+    /* background-color: #f1f1f1; */
+    height: 400px;
+  }
+
+  .amenities-card {
+      display: flex;
+      flex-direction: column;
+      border: 0.1rem solid rgb(232, 243, 255)
+  }
+
+  .amenities-card-header {
+    padding: 10px 0px;
+      text-align: left;
+      font-weight: bold;
+      border-bottom:0.1rem solid rgb(232, 243, 255)
+  }
+
+  .amenities-card-content {
+      padding: 10px 0px;
+      text-align: left;
+  }
+  
+  .amenities-card-footer {
+    padding: 10px 0px;
+    text-align: left;
+    display: flex;
+    border-top:0.1rem solid rgb(232, 243, 255)
+  }
+
+  .amenities-card-footer div {
+    padding: 0 10px 10px 10px;
+  }
+
+  .amenities-card-footer .time {
+    font-weight: bold;
+  }
+
+  .other-card {
+    display: flex;
+    flex-direction: column;
+    border: 0.1rem solid rgb(232, 243, 255);
+    text-align: left;
+}
+
+.other-details-header, .customize-booking-header {
+    padding: 10px 0px;
+    font-weight: bold;
+    border-bottom:0.1rem solid rgb(232, 243, 255)
+}
+
+.other-details-content, .customize-booking-content{
+    padding: 10px 0px;
+    text-align: left;
+}
+
+.customize-booking-content{
+  padding-right:15px
+}
+
+
+
+.other-details-footer {
+  text-align: center;
+  border-top:0.1rem solid rgb(232, 243, 255)
+}
+
+.other-details-header div {
+  padding: 0 10px 10px 10px;
+}
+
+.customize-booking {
+  display: flex;
+  flex-direction: column;
+  border: 0.1rem solid rgb(232, 243, 255);
+  text-align: left;
+}
+
+
+
+  .hotel-detail-wrapper {
+      display: flex;
+      flex-direction: column;
+      margin: 50px;
+  }
+
+  .hotel-title {
+      padding: 20px 20px;
+  }
+  
+
+  /* Responsive columns */
+  @media screen and (max-width: 600px) {
+    .hotel-detail-column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+    }
+    .hotel-detail-wrapper {
+      margin: 10px;
+     }
+
+     .amenities-card-header, .amenities-card-content,.amenities-card-footer,.other-details-header, .other-details-content,.other-details-footer {
+       text-align: center;
+     }
+
+     .amenities-card-footer {
+        flex-direction: column;
+     }
+  }
+

@@ -1,0 +1,18 @@
+.cab-form .ant-select-selector {
+    height: 32px !important;
+  }
+
+  .cab-form .ant-select-selection-placeholder,
+  .cab-form .ant-select-selection-item,
+  .cab-form .ant-select-single.ant-select-lg:not(.ant-select-customize-input)
+  .cab-form .ant-select-selector{
+    line-height: 18px !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    .payment-container .form-row{
+      flex-direction: column !important;
+    }
+  }
+
+  
