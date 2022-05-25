@@ -12,7 +12,6 @@ import SmallCard from "../components/cards/SmallCard";
 const DashboardSeller = () => {
   const { auth } = useSelector((state) => ({ ...state }));
   const [hotels, setHotels] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadSellersHotels();
@@ -21,19 +20,6 @@ const DashboardSeller = () => {
   const loadSellersHotels = async () => {
     let { data } = await sellerHotels(auth.token);
     setHotels(data);
-  };
-
-  const handleClick = async () => {
-    // setLoading(true);
-    // try {
-    //   let res = await createConnectAccount(auth.token);
-    //   console.log(res); // get login link
-    //   window.location.href = res.data;
-    // } catch (err) {
-    //   console.log(err);
-    //   toast.error("Stripe connect failed, Try again.");
-    //   setLoading(false);
-    // }
   };
 
   const handleHotelDelete = async (hotelId) => {
@@ -78,24 +64,7 @@ const DashboardSeller = () => {
         <div className="col-md-6 offset-md-3 text-center">
           <div className="p-5 pointer">
             <HomeOutlined className="h1" />
-            <h4>Setup payouts to post hotel rooms</h4>
-            <p className="lead">
-              MERN partners with stripe to transfer earnings to your bank
-              account
-            </p>
-            <button
-              disabled={loading}
-              onClick={handleClick}
-              className="btn btn-primary mb-3"
-            >
-              {loading ? "Processing..." : "Setup Payouts"}
-            </button>
-            <p className="text-muted">
-              <small>
-                You'll be redirected to Stripe to complete the onboarding
-                process.
-              </small>
-            </p>
+            <h4>Setup payouts to post hotel rooms</h4>           
           </div>
         </div>
       </div>

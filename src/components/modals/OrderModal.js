@@ -19,7 +19,6 @@ const OrderModal = ({ session, orderedBy, showModal, setShowModal,bookingDetails
                     currency: session.currency.toUpperCase(),
                   })}
       </p>
-      {/* <p>Stripe customer id: {session.customer}</p> */}
       <p>Customer: {orderedBy.name}</p>
     </Modal>
   );

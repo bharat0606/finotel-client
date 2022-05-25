@@ -10,20 +10,14 @@ import {
   import { useState } from "react";
   import { useSelector } from "react-redux";
 
-import { getDiscountedPrice } from "../actions/hotel";
 import { currencyFormatter } from "../actions/stripe";
 
-  function Payment({onBookHotel, price, showDiscount = true}) {
+  function Payment({onBookHotel, priceToPaid, showDiscount = true}) {
     //useCardForm is a hook which returns a function.If this function calls,function returns credit card form data values and their validations
     const getFormData = useCardForm();
     const [numberValid, setNumberValid] = useState(true);
     const { auth } = useSelector((state) => ({ ...state }));
-
-    let priceToPaid =  price;
-
-    if(auth?.hotelCount && showDiscount) {
-      priceToPaid = getDiscountedPrice(price);
-    }
+    
 
   
     function handleSubmit(e) {
@@ -57,7 +51,7 @@ import { currencyFormatter } from "../actions/stripe";
                {auth?.hotelCount && showDiscount ? (
                  <>
                  <s>{currencyFormatter({
-                    amount: price || 0,
+                    amount: priceToPaid || 0,
                     currency: "INR",
                   })}</s> 
                  &nbsp;              
@@ -74,7 +68,7 @@ import { currencyFormatter } from "../actions/stripe";
                 ) : (
                   <>
                   {currencyFormatter({
-                    amount: price || 0,
+                    amount: priceToPaid || 0,
                     currency: "INR",
                   })}
                   </>

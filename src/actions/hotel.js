@@ -90,3 +90,10 @@ export const bookHotel = async (token, hotelId, amount, bookingDetails) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+  export const deleteBooking = async (token, orderId) =>
+  await axios.delete(`${process.env.REACT_APP_API}/delete-booking/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });

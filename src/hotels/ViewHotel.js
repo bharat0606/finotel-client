@@ -205,7 +205,7 @@ const ViewHotel = ({ match, history }) => {
                 }
                 disabledDate={(current) =>
                   {   
-                    return (current && current.valueOf() < moment().subtract(1, "days") || current && current.valueOf() > moment(hotel.to).add(1, "days")) }
+                    return (current && (current.valueOf() < moment().subtract(1, "days") || current.valueOf() > moment(hotel.to).add(1, "days"))) }
                 }
                 
                 />

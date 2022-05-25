@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import moment from "moment";
+
 
 import { currencyFormatter } from "../../actions/stripe";
 import { diffDays } from "../../actions/hotel";
 import OrderModal from "../modals/OrderModal";
 
-const BookingCard = ({ hotel, session, orderedBy,bookingDetails }) => {
+const BookingCard = ({orderId, hotel, session, orderedBy,bookingDetails,handleOrderDelete }) => {
   const [showModal, setShowModal] = useState(false);
+  // const [canCancelBooking, setCanCancelBooking] = useState(true);
 
-  const history = useHistory();
+  const cancelBooking = () =>{
+    handleOrderDelete(orderId);
+  }
+
   return (
     <>
       <div className="card mb-3 small-cards" style={{width:'100%', background:'white'}}>
@@ -46,14 +51,20 @@ const BookingCard = ({ hotel, session, orderedBy,bookingDetails }) => {
                 200
               )}...`}</p>
               <p className="card-text">
-                <span className="float-right text-primary">
-                  for {diffDays(hotel.from, hotel.to)}{" "}
-                  {diffDays(hotel.from, hotel.to) <= 1 ? " day" : " days"}
-                </span>
+                { bookingDetails?.to && bookingDetails?.from && 
+                    <span className="float-right text-primary">
+                    for {diffDays(bookingDetails.from, bookingDetails.to)}{" "}
+                    {diffDays(bookingDetails.from, bookingDetails.to) <= 1 ? " day" : " days"}
+                  </span>
+
+                }
+                
               </p>
-              <p className="card-text">
-                Available {hotel.bed} bed from {new Date(hotel.from).toLocaleDateString()}
-              </p>
+              { bookingDetails?.bed &&
+                   <p className="card-text">
+                   Booked {bookingDetails.bed} bed from {new Date(bookingDetails.from).toLocaleDateString()}
+                 </p>
+                }
 
               {showModal && (
                 <OrderModal
@@ -72,6 +83,13 @@ const BookingCard = ({ hotel, session, orderedBy,bookingDetails }) => {
                 >
                   Show Booking info
                 </button>
+
+                {moment(bookingDetails.from).isAfter(moment(new Date()).format("YYYY-MM-DD")) &&  <button
+                  onClick={cancelBooking}
+                  className="btn btn-primary"
+                >
+                  Cancel Booking
+                </button>}
               </div>
             </div>
           </div>

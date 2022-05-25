@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Spin, Space } from 'antd';
 import { useSelector } from "react-redux";
-
+import { toast } from "react-toastify";
 
 import DashboardNav from "../components/DashboardNav";
-import { userHotelBookings } from "../actions/hotel";
+import { deleteBooking, userHotelBookings } from "../actions/hotel";
 import BookingCard from "../components/cards/BookingCard";
 
 const Dashboard = () => {
@@ -25,6 +25,19 @@ const Dashboard = () => {
     setBooking(res.data);
     console.log(res.data)
     setIsLoading(false)
+  };
+
+  const handleOrderDelete = async (orderId) => {
+    if (!window.confirm("Are you sure?")) return;
+    try {
+      deleteBooking(token, orderId).then((res) => {
+        toast.success("Booking Deleted");
+        loadUserBookings();
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    
   };
 
   return (
@@ -56,10 +69,12 @@ const Dashboard = () => {
         {booking.map((b) => (
           <BookingCard
             key={b._id}
+            orderId={b._id}
             hotel={b.hotel}
             session={b.session}
             bookingDetails={b.bookingDetails}
             orderedBy={b.orderedBy}
+            handleOrderDelete = {handleOrderDelete}
           />
         ))}
       </div>

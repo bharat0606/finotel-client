@@ -210,7 +210,7 @@
   flex-wrap: wrap;
 }
 
-.small-cards:hover{
+.small-cards:hover {
   background-color: #cce4f5 !important;
   border: 1px solid rgb(0, 124, 194);
   cursor: pointer !important;
@@ -278,6 +278,10 @@
   .ap-dropdown-menu {
     width:  350px !important;
   }
+
+  /* .btn-primary {
+    border: 0px !important;
+  } */
  }    
 
  
