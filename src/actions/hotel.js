@@ -78,7 +78,6 @@ export const isAlreadyBooked = async (token, hotelId) =>
   });
 
 
-
 export const searchListings = async (query) =>
   await axios.post(`${process.env.REACT_APP_API}/search-listings`, query);
 
@@ -93,6 +92,26 @@ export const bookHotel = async (token, hotelId, amount, bookingDetails) =>
 
   export const deleteBooking = async (token, orderId) =>
   await axios.delete(`${process.env.REACT_APP_API}/delete-booking/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+
+  export const checkHotelAvailability = async (query) =>
+  await axios.post(`${process.env.REACT_APP_API}/check-hotel-availability`, query);
+
+
+  export const getHotelBookings = async (token, hotelId) =>
+  await axios.get(`${process.env.REACT_APP_API}/hotel-bookings/${hotelId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+
+  export const getCompletedOrdersCount = async (token, userlId) =>
+  await axios.get(`${process.env.REACT_APP_API}/completed-bookings/${userlId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

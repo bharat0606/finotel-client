@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { EditOutlined, DeleteOutlined  } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined,InfoCircleOutlined  } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 import { diffDays, getDiscountedPrice } from "../../actions/hotel";
@@ -13,24 +14,29 @@ const SmallCard = ({
   showDiscount = true, // for Seller it will be false
 }) => {
   const { auth } = useSelector((state) => ({ ...state }));
-
   const history = useHistory();
+
+  const  hotelBookings  =  (hotelId) => {
+    history.push(`/booking-details/${hotelId}`);
+  }
+
+  
   return (
     <>
-      <div className="card mb-1 small-cards"  style={{width:'100%', background:'white'}}>
+      <div className="small-cards"  style={{width:'100%', background:'white'}}>
         {/* <span><i className="fa fa-check" aria-hidden="true" style={{color:'green', fontSize:'24x'}}></i></span> */}
         <div className="no-gutters">
           <div className="col-md-3">
             {h.image && h.image.contentType ? (
               <img
                 src={`${process.env.REACT_APP_API}/hotel/image/${h._id}`}
-                alt="default hotel image"
+                alt="default hotel"
                 className="hotel-image"
               />
             ) : (
               <img
                 src="https://via.placeholder.com/900x500.png?text=MERN+Booking"
-                alt="default hotel image"
+                alt="default hotel"
                 className="hotel-image"
               />
             )}
@@ -74,7 +80,7 @@ const SmallCard = ({
                 </span>
               </p>
               <p className="card-text">
-                Available {h.bed} bed from {new Date(h.from).toLocaleDateString()}
+                Available {h.bed} rooms from {new Date(h.from).toLocaleDateString()}
               </p>
             </div>
           </div>
@@ -100,10 +106,14 @@ const SmallCard = ({
                       className="text-danger"
                       style={{ fontSize: '30px' }}
                     />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <InfoCircleOutlined 
+                    onClick={ () => hotelBookings(h._id) } 
+                    className="text-danger"
+                    style={{ fontSize: '30px' }}/>                   
                   </div>
                 )}
-              </div>
-                
+              </div>                
           </div>
         </div>
       </div>

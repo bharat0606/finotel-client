@@ -20,6 +20,7 @@ import SearchResult from "./hotels/SearchResult";
 import PaymentContainer from "./booking/PaymentContainer";
 import CabContainer from "./components/cabs/CabContainer"
 import CabPayment from "./components/cabs/CabPayment";
+import HotelBookings from "./user/HotelBookings";
 
 
 
@@ -50,6 +51,7 @@ function App() {
         <PrivateRoute exact path="/payment/:hotelId" component={PaymentContainer} />
         <PrivateRoute exact path="/cabs" component={CabContainer} />
         <PrivateRoute exact path="/cabs/payment/:id" component={CabPayment} />
+        <PrivateRoute exact path="/booking-details/:hotelId" component={HotelBookings} />
       </Switch>
     </BrowserRouter>
   );

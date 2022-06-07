@@ -35,7 +35,6 @@ const EditHotel = ({ match }) => {
 
   const loadSellerHotel = async () => {
     let res = await read(match.params.hotelId);
-    // console.log(res);
     setValues({ ...values, ...res.data });
     setPreview(`${process.env.REACT_APP_API}/hotel/image/${res.data._id}`);
   };
@@ -56,16 +55,13 @@ const EditHotel = ({ match }) => {
 
     try {
       let res = await updateHotel(token, hotelData, match.params.hotelId);
-      console.log("HOTEL UPDATE RES", res);
       toast.success(`${res.data.title} is updated`);
     } catch (err) {
-      console.log(err);
       toast.error(err.response.data.err);
     }
   };
 
   const handleImageChange = (e) => {
-    // console.log(e.target.files[0]);
     setPreview(URL.createObjectURL(e.target.files[0]));
     setImage(e.target.files[0]);
   };
@@ -79,10 +75,15 @@ const EditHotel = ({ match }) => {
       <div className="container-fluid bg-secondary p-5 text-center nav-banner">
         <h2>Edit Hotel</h2>
       </div>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-10">
-            <br />
+      <div className="wrapper">
+      <div className="image-peview">
+            <img
+              src={preview}
+              alt="preview"
+              className="img img-fluid m-2"
+            />
+          </div>
+          <div className="form-div">
             <HotelEditForm
               values={values}
               setValues={setValues}
@@ -90,16 +91,8 @@ const EditHotel = ({ match }) => {
               handleImageChange={handleImageChange}
               handleSubmit={handleSubmit}
             />
-          </div>
-          <div className="col-md-2">
-            <img
-              src={preview}
-              alt="preview_image"
-              className="img img-fluid m-2"
-            />
-          </div>
+          </div>         
         </div>
-      </div>
     </>
   );
 };

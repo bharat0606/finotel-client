@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-const DashboardNav = () => {
-  //   console.log(active);
+const DashboardNav = ({bookingsCount = 0}) => {
   return (
     <ul className="nav nav-tabs">
       <li className="nav-item">
@@ -11,7 +10,7 @@ const DashboardNav = () => {
           to="/dashboard"
           activeClassName='active'
         >
-          <i className="fa fa-money"/> &nbsp;Your Bookings
+          <i className="fa fa-money"/> &nbsp;Your Bookings {bookingsCount ? `(${bookingsCount})` : ''}
         </NavLink>
       </li>
       <li className="nav-item">

@@ -8,17 +8,7 @@ const LoginForm = ({
   setPassword,
 }) => {
   const history = useHistory()
-
-  const handleAction = () => {
-    history.push("/register");
-    return;
-  }
-
   return (
-
-    <>
-
-
       <div className="frame">
         <div style={{
           backgroundColor: "#000",
@@ -50,7 +40,6 @@ const LoginForm = ({
         <div>
         </div>
       </div>
-    </>
   )
 };
 

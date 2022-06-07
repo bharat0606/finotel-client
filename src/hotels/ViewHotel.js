@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { read, diffDays, isAlreadyBooked, getDiscountedPrice } from "../actions/hotel";
+import { read, diffDays, isAlreadyBooked, getDiscountedPrice,checkHotelAvailability } from "../actions/hotel";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { DatePicker, Select } from "antd";
@@ -19,6 +19,7 @@ const ViewHotel = ({ match, history }) => {
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
+  const [canBookHotel, setCanBookHotel] = useState(false);
 
   const { auth } = useSelector((state) => ({ ...state }));
 
@@ -29,7 +30,6 @@ const ViewHotel = ({ match, history }) => {
   useEffect(() => {
     if (auth && auth.token) {
       isAlreadyBooked(auth.token, match.params.hotelId).then((res) => {
-        // console.log(res);
         if (res.data.ok) setAlreadyBooked(true);
       });
     }
@@ -41,9 +41,6 @@ const ViewHotel = ({ match, history }) => {
     if (res.data?.amenities) {
       setAmenities(res.data.amenities.split(""))
     }
-    // if (res.data?.to) {
-    //   setBookingDetails({...bookingDetails, from: moment(new Date(), "YYYY-MM-DD"), to:moment(res.data.to, "YYYY-MM-DD"), bed: res.data.bed })
-    // }
     setImage(`${process.env.REACT_APP_API}/hotel/image/${res.data._id}`);
   };
 
@@ -62,9 +59,16 @@ const ViewHotel = ({ match, history }) => {
     history.push(`/payment/${hotel._id}`);
   };
 
+  const checkAvailability = () =>{
+    // setCanBookHotel
+    checkHotelAvailability({...bookingDetails, hotelId: hotel._id}).then((res) => {
+      setCanBookHotel(res.data.canBook)
+    });
+  }
+
   return (
     <>
-      <div className="container-fluid bg-secondary p-5 text-center banner">
+      <div className="container-fluid bg-secondary p-5 text-center banner hotel-detail-img">
         <h1>{hotel.title}</h1>
       </div>
       <div className="hotel-detail-wrapper">
@@ -104,9 +108,9 @@ const ViewHotel = ({ match, history }) => {
           </p>
         </div>
         <div className="hotel-detail">
-          <div className="hotel-detail-column">
+          <div className="hotel-image-column">
             <div className="hotel-detail-card">
-              <img src={image} alt={hotel.title} className="img img-fluid m-2 hotel-image" />    </div>
+              <img src={image} alt={hotel.title} className="img img-fluid hotel-image" />    </div>
           </div>
 
           <div className="hotel-detail-column">
@@ -125,10 +129,10 @@ const ViewHotel = ({ match, history }) => {
               </div>
               <div className="amenities-card-footer">
                 <div>
-                  <p>Check-in</p><p className="time">12:00 PM</p>
+                  <p>Check-in</p><p className="time">12:00 AM</p>
                 </div>
                 <div>
-                  <p>Check-Out</p><p className="time">12:00 PM</p>
+                  <p>Check-Out</p><p className="time">11:00 PM</p>
                 </div>
               </div>
             </div>
@@ -160,7 +164,7 @@ const ViewHotel = ({ match, history }) => {
                 {auth?.user?._id !== hotel?.postedBy?._id && <button
                   onClick={handleClick}
                   className="btn btn-block btn-lg btn-primary mt-3"
-                  disabled={loading || alreadyBooked}
+                  disabled={loading || alreadyBooked || (auth?.token && !canBookHotel)}
                 >
                   {loading
                     ? "Loading..."
@@ -176,17 +180,17 @@ const ViewHotel = ({ match, history }) => {
             </div>
           </div>
 
-          { !alreadyBooked && auth && auth?.user?._id !== hotel?.postedBy?._id && <div className="hotel-detail-column">
+          { !alreadyBooked && auth && auth?.user?._id !== hotel?.postedBy?._id && <div className="hotel-customize-column">
             <div className="hotel-detail-card customize-booking">
               <div className="customize-booking-header">
-                 Booking Details <small style={{color:'red'}}>(Mandatory)</small>
+                 Select Booking Details <small style={{color:'red'}}>(Mandatory) {canBookHotel && 'can book'}</small>
               </div>
               <div className="customize-booking-content">
                 <Select
                   onChange={(value) => setBookingDetails({ ...bookingDetails, bed: value })}
                   className="w-100 m-2"
                   size="large"
-                  placeholder="Number of beds"
+                  placeholder="Number of rooms"
                 >
 
                   {BEDS.map((bed) => {
@@ -198,10 +202,11 @@ const ViewHotel = ({ match, history }) => {
 
                 {hotel.from && (
                 <DatePicker
-                  placeholder="From date"
+                  placeholder="Check-in"
                   className="form-control m-2"
                 onChange={(date, dateString) =>
-                  setBookingDetails({ ...bookingDetails, from: dateString })
+                   {  
+                     setBookingDetails({ ...bookingDetails, from: dateString }) }
                 }
                 disabledDate={(current) =>
                   {   
@@ -213,7 +218,7 @@ const ViewHotel = ({ match, history }) => {
 
               {hotel.to && (
                 <DatePicker
-                  placeholder="To date"
+                  placeholder="Check-out"
                   className="form-control m-2"
                   onChange={(date, dateString) =>
                   setBookingDetails({ ...bookingDetails, to: dateString })
@@ -226,11 +231,12 @@ const ViewHotel = ({ match, history }) => {
               )}
               </div>
               <div className="customize-booking-footer">
-              {/* <button
+              <button
                   className="btn btn-block btn-lg btn-primary mt-3"
+                  onClick={checkAvailability}
                 >
                   See Availability
-                </button> */}
+                </button>
               </div>
             </div>
           </div>}

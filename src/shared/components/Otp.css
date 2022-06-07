@@ -5,16 +5,22 @@
     height: 100vh;
     align-items: center;
     justify-content: center;
+    background-image: url(../../assets/otp-wallpaper.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: grayscale(.3);
 }
 
 .otp-header {
     text-align: center;
     font-weight: bold;
+    color: #ffff;
 }
 
-.otp-header h1 {
-    color: #000;
-}
+/* .otp-header h1 {
+    color: #ffff;
+} */
 
 .otp-content {
     display: flex;

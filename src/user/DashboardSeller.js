@@ -23,20 +23,22 @@ const DashboardSeller = () => {
   };
 
   const handleHotelDelete = async (hotelId) => {
-    if (!window.confirm("Are you sure?")) return;
+    if (!window.confirm("Are you sure you want to delete?")) return;
     deleteHotel(auth.token, hotelId).then((res) => {
       toast.success("Hotel Deleted");
       loadSellersHotels();
-    });
+    }).catch(err =>{
+      toast.error(err.response.data);
+    })
   };
 
   const connected = () => (
     <div className="container-fluid">
-      <div className="row dashboard-top">
-        <div className="col-md-10">
+      <div className="dashboard-top">
+        <div className="dashboard-title">
           <h2>Your Hotels</h2>
         </div>
-        <div className="col-md-2">
+        <div className="dashboard-actions">
           <Link to="/hotels/new" className="btn btn-primary">
             + Add New
           </Link>

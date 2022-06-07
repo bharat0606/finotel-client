@@ -14,7 +14,7 @@ const Register = ({ history }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await register({
+      await register({
         name,
         email,
         password,
@@ -22,7 +22,6 @@ const Register = ({ history }) => {
       toast.success("Register success. Please login.");
       history.push("/login");
     } catch (err) {
-      console.log(err);
       if (err.response.status === 400) toast.error(err.response.data);
     }
   };
@@ -30,7 +29,7 @@ const Register = ({ history }) => {
   return (
     <>
       <div className="login-form">
-        <img src={loginWallper} />
+        <img src={loginWallper}  alt="register"/>
         <div className="p-5">
           <RegisterForm
             handleSubmit={handleSubmit}

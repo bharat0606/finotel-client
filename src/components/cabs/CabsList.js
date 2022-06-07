@@ -7,11 +7,11 @@ import { allBookedCabs } from '../../actions/cab';
 
 const COLUMNS = [
   {
-    title: 'Source',
+    title: 'Pick-Up',
     dataIndex: 'source',
   }, 
   {
-    title: 'Destination',
+    title: 'Drop',
     dataIndex: 'destination',
   },
 
@@ -62,11 +62,11 @@ const CabsList = () =>{
   const changeMobileDetail = () => {
     const mobileColumns = [
       {
-        title: 'Source',
+        title: 'Pick-Up',
         dataIndex: 'source',
       }, 
       {
-        title: 'Destination',
+        title: 'Drop',
         dataIndex: 'destination',
       },
     

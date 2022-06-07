@@ -25,14 +25,10 @@ const NewHotel = () => {
     "https://via.placeholder.com/100x100.png?text=PREVIEW"
   );
   const [location, setLocation] = useState("");
-  // destructuring variables from state
   const { title, content, image, price, from, to, bed,amenities } = values;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(values);
-    // console.log(location);
-
     let hotelData = new FormData();
     hotelData.append("title", title);
     hotelData.append("content", content);
@@ -44,23 +40,18 @@ const NewHotel = () => {
     hotelData.append("bed", bed);
     hotelData.append("amenities",amenities)
 
-    console.log([...hotelData]);
-
     try {
-      let res = await createHotel(token, hotelData);
-      console.log("HOTEL CREATE RES", res);
+      await createHotel(token, hotelData);
       toast.success("New hotel is posted");
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (err) {
-      console.log(err);
       toast.error(err.response.data);
     }
   };
 
   const handleImageChange = (e) => {
-    // console.log(e.target.files[0]);
     setPreview(URL.createObjectURL(e.target.files[0]));
     setValues({ ...values, image: e.target.files[0] });
   };
@@ -69,15 +60,19 @@ const NewHotel = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  return (
-    <>
+  return (    <>
       <div className="container-fluid bg-secondary p-5 text-center nav-banner">
         <h2>Add Hotel</h2>
       </div>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-10">
-            <br />
+      <div className="wrapper">
+      <div className="image-peview">
+            <img
+              src={preview}
+              alt="preview"
+              className="img img-fluid"
+            />
+          </div>
+          <div className="form-div">           
             <HotelCreateForm
               values={values}
               setValues={setValues}
@@ -87,15 +82,7 @@ const NewHotel = () => {
               location={location}
               setLocation={setLocation}
             />
-          </div>
-          <div className="col-md-2">
-            <img
-              src={preview}
-              alt="preview_image"
-              className="img img-fluid m-2"
-            />
-          </div>
-        </div>
+          </div>          
       </div>
     </>
   );

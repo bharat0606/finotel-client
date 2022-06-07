@@ -17,6 +17,18 @@ const TopNav = () => {
   const active = window.location.pathname;
 
   useEffect(() => {
+    window.addEventListener('scroll', isSticky);
+    return () => {
+        window.removeEventListener('scroll', isSticky);
+    };
+});
+
+  const isSticky = (e) => {
+    const header = document.querySelector('.top-nav');
+    window.scrollY > 1 ? header.classList.add('sticky') : header.classList.remove('sticky');
+};
+
+  useEffect(() => {
     handleResize();
     // window.addEventListener("resize", handleResize)
   }, []);

@@ -10,13 +10,6 @@ import { BEDS } from "../../constants";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-const config = {
-  appId: process.env.REACT_APP_ALGOLIA_APP_ID,
-  apiKey: process.env.REACT_APP_ALGOLIA_API_KEY,
-  language: "en",
-  // countries: ["au"],
-};
-
 const Search = () => {
   // state
   const [location, setLocation] = useState("");
@@ -30,22 +23,19 @@ const Search = () => {
   };
 
   return (
-    <div className="d-flex pb-4">
+    <div className="d-flex search-wrapper">
       <div className="w-100">
         <AlgoliaPlaces
           placeholder="Location"
           defaultValue={location}
-          options={config}
           onChange={({ suggestion }) => setLocation(suggestion.value)}
           style={{ height: "50px" }}
         />
       </div>
 
       <RangePicker
-        onChange={(value, dateString) => setDate(dateString)}
-        // disabledDate={(current) =>
-        //   current && current.valueOf() < moment().subtract(1, "days")
-        // }
+      placeholder = {['Check In', 'Check Out']}
+        onChange={(value, dateString) => setDate(dateString)}      
         className="w-100"
       />
 
@@ -53,7 +43,7 @@ const Search = () => {
         onChange={(value) => setBed(value)}
         className="w-100"
         size="large"
-        placeholder="Number of beds"
+        placeholder="Number of rooms"
       >
         <Option key={''}>---Select---</Option>
         {BEDS.map((bed) => (

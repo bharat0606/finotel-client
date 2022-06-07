@@ -57,13 +57,12 @@ const CabForm = () => {
     formData.append("departureDate", departureDate);
 
     try {
-      let res = await bookCab(token, formData);
+      await bookCab(token, formData);
       toast.success("Cab is booked");
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (err) {
-      console.log(err);
       toast.error(err.response.data);
     }
   };
@@ -88,7 +87,6 @@ const CabForm = () => {
 const calculateFair = () => {
    if(values.destination && values.source) {
                 const result = CABS_FAIR_DATA.find(row => row.destionation === values.destination && row.source === values.source)
-                // console.log(result)
                 if(result){
                   setRouteId(result.id)
                     const fair  = DISTANCE_DISCOUNT > result.distance  ? 0 : (result.distance -DISTANCE_DISCOUNT) * result.fairPerKm;
@@ -113,36 +111,30 @@ const calculateFair = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-      <div className="form-row d-flex m-5 align-items-center">
-      <div className="form-group col-md-2">
+      <form onSubmit={handleSubmit} className="cab-search-form">
 
 <Select
-    className="w-100 m-2 p-1 cab-form"
+    className="cab-form w-25"
     onChange = {(value) => {handleLocationChange(value, 'source')}}
     size="large"
-    placeholder="Source"
+    placeholder="Pick-Up"
   >
     <Option key={"Mansarovar"}>Mansarovar</Option>
     <Option key={"Sodala"}>Sodala</Option>
   </Select>
   
-  </div>
-  <div className="form-group col-md-2">
   <Select
-    className="w-100 m-2 p-1 cab-form"
+    className="cab-form w-25"
     onChange = {(value) => {handleLocationChange(value, 'destination')}}
-    placeholder="Destination"
+    placeholder="Drop"
   >
     <Option key={"Mahesh Nagar"}>Mahesh Nagar</Option>
     <Option key={"Vaishali"}>Vaishali</Option>
     <Option key={"Bagru"}>Bagru</Option>
 \        </Select>
-</div>
-<div className="form-group col-md-2">
 <DatePicker
   placeholder="Departure Date"
-  className="form-control w-100  m-2 p-1"
+  className="w-25"
   onChange={(date, dateString) => {
     setValues({ ...values, departureDate: dateString })
     setMessage("");
@@ -152,16 +144,12 @@ const calculateFair = () => {
     current && current.valueOf() < moment().subtract(1, "days")
   }
 />
-</div>
-<div className="form-group col-md-2">
-  <TimePicker className="w-100  m-2 p-1" use12Hours format="h:mm a" onChange={onChange}  value={moment(time, format)}/>               
-</div>
+  <TimePicker className="time" use12Hours format="h:mm a" onChange={onChange}  value={moment(time, format)}/>               
 <div className="form-group col-md-4">&nbsp; &nbsp;
 <button className="btn btn-outline-primary m-2" type="button" onClick={calculateFair}>Calculate Fair</button>
 <button className="btn btn-outline-primary m-2">Book</button>
  
 </div>
-  </div>
     </form>
     {message && <div className="alert alert-primary" role="alert" dangerouslySetInnerHTML={{__html: message}}>
     </div>}

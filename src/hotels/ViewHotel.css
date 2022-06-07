@@ -1,7 +1,16 @@
-.hotel-detail-column {
+.hotel-detail-column,.hotel-customize-column {
     float: left;
     width: 25%;
     padding: 0 10px;
+  }
+
+  .hotel-image-column {
+    float: left;
+    width: 50%;
+    padding: 0 10px;
+  }
+  .hotel-customize-column {
+    width: 100%;
   }
   
   /* Remove extra left and right margins, due to padding */
@@ -111,11 +120,15 @@
   .hotel-title {
       padding: 20px 20px;
   }
+
+  .customize-booking-footer{
+    text-align: center;
+  }
   
 
   /* Responsive columns */
   @media screen and (max-width: 600px) {
-    .hotel-detail-column {
+    .hotel-detail-column, .hotel-image-column, .hotel-customize-column {
       width: 100%;
       display: block;
       margin-bottom: 20px;

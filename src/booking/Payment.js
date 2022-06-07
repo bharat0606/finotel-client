@@ -12,7 +12,7 @@ import {
 
 import { currencyFormatter } from "../actions/stripe";
 
-  function Payment({onBookHotel, priceToPaid, showDiscount = true}) {
+  function Payment({onBookHotel, price, showDiscount = true}) {
     //useCardForm is a hook which returns a function.If this function calls,function returns credit card form data values and their validations
     const getFormData = useCardForm();
     const [numberValid, setNumberValid] = useState(true);
@@ -32,7 +32,7 @@ import { currencyFormatter } from "../actions/stripe";
           }`
         );
       } else {
-        onBookHotel(priceToPaid)
+        onBookHotel(price)
       }
         
     }
@@ -43,7 +43,7 @@ import { currencyFormatter } from "../actions/stripe";
     }
   
     return (
-      <div className="row mt-5">
+      <div className="row m-5">
         <div className="alert alert-success text-center mb-5">    
 
                Your Bill amount is &nbsp;
@@ -51,13 +51,13 @@ import { currencyFormatter } from "../actions/stripe";
                {auth?.hotelCount && showDiscount ? (
                  <>
                  <s>{currencyFormatter({
-                    amount: priceToPaid || 0,
+                    amount: price || 0,
                     currency: "INR",
                   })}</s> 
                  &nbsp;              
                         <b>
                         {currencyFormatter({
-                    amount: priceToPaid || 0,
+                    amount: price || 0,
                     currency: "INR",
                   })}
                           </b>
@@ -68,7 +68,7 @@ import { currencyFormatter } from "../actions/stripe";
                 ) : (
                   <>
                   {currencyFormatter({
-                    amount: priceToPaid || 0,
+                    amount: price || 0,
                     currency: "INR",
                   })}
                   </>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import moment from "moment";
+
 import { Link } from "react-router-dom";
-import { Spin, Space } from 'antd';
+import { Spin, Space, Tabs  } from 'antd';
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -8,11 +10,17 @@ import DashboardNav from "../components/DashboardNav";
 import { deleteBooking, userHotelBookings } from "../actions/hotel";
 import BookingCard from "../components/cards/BookingCard";
 
+const { TabPane } = Tabs;
+
 const Dashboard = () => {
   const {
     auth: { token },
   } = useSelector((state) => ({ ...state }));
   const [booking, setBooking] = useState([]);
+  const [filteredBooking, setFilteredBooking] = useState([]);
+  const [completedBookings, setCompletedBookings] = useState([]);
+  const [upcomingBookings, setUpcomingBookings] = useState([]);
+  const [onGoingBookings, setOnGoingBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -23,12 +31,26 @@ const Dashboard = () => {
     setIsLoading(true)
     const res = await userHotelBookings(token);
     setBooking(res.data);
-    console.log(res.data)
+
+    
+
+    const completedBookings = res.data.filter(row =>moment(row.from).isBefore(moment(new Date()).format("YYYY-MM-DD")))
+    setCompletedBookings(completedBookings)
+    setFilteredBooking(completedBookings);
+
+    const onGoingBookings = res.data.filter(row =>moment(row.from).isSame(moment(new Date()).format("YYYY-MM-DD")))
+    setOnGoingBookings(onGoingBookings)
+
+    const upcomingBookings = res.data.filter(row =>moment(row.from).isAfter(moment(new Date()).format("YYYY-MM-DD")))
+    setUpcomingBookings(upcomingBookings)
+
+    console.log(upcomingBookings)
+
     setIsLoading(false)
   };
 
   const handleOrderDelete = async (orderId) => {
-    if (!window.confirm("Are you sure?")) return;
+    if (!window.confirm("Are you sure you want to delete?")) return;
     try {
       deleteBooking(token, orderId).then((res) => {
         toast.success("Booking Deleted");
@@ -40,21 +62,36 @@ const Dashboard = () => {
     
   };
 
+  const onChange = (key) => {
+    if(key === 'completed') {
+      // const filteredData = booking.filter(row =>moment(row.from).isBefore(moment(new Date()).format("YYYY-MM-DD")))
+      setFilteredBooking(completedBookings)
+    } else if(key === 'going') {
+      // const filteredData = booking.filter(row =>moment(row.from).isSame(moment(new Date()).format("YYYY-MM-DD")))
+      setFilteredBooking(onGoingBookings)
+    }
+    else if(key === 'upcoming') {
+      // const filteredData = booking.filter(row =>moment(row.from).isAfter(moment(new Date()).format("YYYY-MM-DD")))
+      setFilteredBooking(upcomingBookings)
+    }
+    
+  };
+
   return (
     <>
       <div className="container-fluid bg-secondary p-5 nav-banner">
       </div>
 
       <div className="container-fluid p-4">
-        <DashboardNav />
+        <DashboardNav bookingsCount ={booking?.length}/>
       </div>
 
       <div className="container-fluid">
-        <div className="row dashboard-top">
-          <div className="col-md-10">
+        <div className="dashboard-top">
+          <div className="dashboard-title">
             <h2>Your Bookings</h2>
           </div>
-          <div className="col-md-2">
+          <div className="dashboard-actions">
             <Link to="/" className="btn btn-primary">
               Browse Hotels
             </Link>
@@ -63,16 +100,26 @@ const Dashboard = () => {
       </div>
 
       <div className="row dashboard-content">
+      <Tabs defaultActiveKey="1" onChange={onChange}>
+    <TabPane tab={`Completed (${completedBookings.length})`} key="completed">
+    </TabPane>
+    <TabPane tab={`On-Going (${onGoingBookings.length})`} key="going">
+    </TabPane>
+    <TabPane tab={`Upcoming (${upcomingBookings.length})`} key="upcoming">
+    </TabPane>
+  </Tabs>
       {isLoading && <Space size="middle"  className="spinner">
             <Spin size="large" />
           </Space>}
-        {booking.map((b) => (
+        {filteredBooking.map((b) => (
           <BookingCard
             key={b._id}
             orderId={b._id}
             hotel={b.hotel}
             session={b.session}
-            bookingDetails={b.bookingDetails}
+            to={b.to}
+            bed={b.bed}
+            from={b.from}
             orderedBy={b.orderedBy}
             handleOrderDelete = {handleOrderDelete}
           />

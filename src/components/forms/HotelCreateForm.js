@@ -6,12 +6,7 @@ import { AMENITIES, BEDS, DEFAULT_SELECTED_AMENITIES } from "../../constants";
 
 const { Option } = Select;
 
-const config = {
-  appId: process.env.REACT_APP_ALGOLIA_APP_ID,
-  apiKey: process.env.REACT_APP_ALGOLIA_API_KEY,
-  language: "en",
-  // countries: ["au"],
-};
+
 
 const HotelCreateForm = ({
   values,
@@ -65,7 +60,6 @@ const HotelCreateForm = ({
           className="form-control m-2"
           placeholder="Location"
           defaultValue={location}
-          options={config}
           onChange={({ suggestion }) => setLocation(suggestion.value)}
           style={{ height: "50px" }}
         />
@@ -74,7 +68,7 @@ const HotelCreateForm = ({
           type="number"
           name="price"
           onChange={handleChange}
-          placeholder="Price per bed"
+          placeholder="one day price per room"
           className="form-control m-2"
           value={price}
         />
@@ -83,7 +77,7 @@ const HotelCreateForm = ({
           onChange={(value) => setValues({ ...values, bed: value })}
           className="w-100 m-2"
           size="large"
-          placeholder="Number of beds"
+          placeholder="Number of rooms"
         > 
 
           {BEDS.map((bed) => (

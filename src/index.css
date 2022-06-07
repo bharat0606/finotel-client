@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -26,10 +30,14 @@
   object-fit: fill;
 }
 
-.banner{
-  background-image: url(./assets/hotel-banner.PNG);
+.banner{ 
   background-size:cover;
   height: 220px;
+  position: relative;
+}
+
+.hotel-detail-img {
+ background-image: url(./assets/hotel-banner.PNG);
 }
 
 .nav-banner {
@@ -50,6 +58,13 @@
   font-weight: bold;
 }
 
+
+.banner h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 
 
@@ -111,11 +126,6 @@
 }
 
 
-/* .no-gutters:hover{
-  background-color: #cce4f5;
-  cursor: pointer;
-} */
-
 .nav-link {
   color: black;
 }
@@ -132,7 +142,7 @@
 }
 
 .nav-tabs .active {
-  color:#008cff !important;
+  color:#0071c2 !important;
 }
 
 .logo-link{
@@ -155,6 +165,7 @@
   background-color: #fff;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid rgb(232, 237, 235);
 }
 
 .show-more {
@@ -202,8 +213,13 @@
 
 .small-cards {
   width:'100%' !important;
-  background:'white'!important;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  border: 1px solid #dddddd;
+  padding: 10px;
+  box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.16);
 }
+
 
 .small-cards .no-gutters {
   display: flex;
@@ -237,6 +253,9 @@
 
 .home-content,.dashboard-content {
   position: relative;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #fff;  
 }
 
 .spinner {
@@ -247,8 +266,67 @@
   
 }
 
+
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  width: 100%;
+  transform: translate3d(0,0,0);
+  border-bottom: 1px solid rgb(0, 124, 194);
+}
+
+.btn-primary {
+  background: #0071c2 !important;
+}
+
+
+
+.go-back {
+  background-color:#0071c2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 10px;
+  color: #fff;
+  border-color: #0071c2;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.wrapper {
+  /* background-color: yellow; */
+  display: flex;
+  justify-content: center;  
+  padding-top: 50px;
+  /* background-image: url(https://media.geeksforgeeks.org/wp-content/uploads/20191212174641/bg1.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; */
+}
+
+.wrapper .form-control, .wrapper .ant-select-selector {
+  background-color: transparent !important;
+  /* color: #fff !important; */
+}
+
+.dashboard-top {
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+/* .search-wrapper {
+  border: 1px solid rgb(0, 124, 194);
+} */
+
  /* Responsive columns */
  @media screen and (max-width: 600px) {
+
+  .wrapper {
+    flex-direction: column;
+    padding: 10px 30px;
+  }
 
   .right-nav {
     margin-left: 10px;
@@ -259,29 +337,27 @@
     padding-bottom: 10px;
   }
 
-  .payment-wrapper {
-    margin: 0 50px;
+  .payment-wrapper .card-new {
+    margin: 0 auto;
   }
 
   .payment-wrapper ,.input-text-pay {
     padding: 0px;
   }
 
-  .dashboard-top .col-md-10 {
-    width: 60%;
-  }
-
-  .dashboard-top .col-md-2 {
-    width: 40%;
-  }
+  .form-box-pay {   
+    padding: 1rem 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+  }  
 
   .ap-dropdown-menu {
     width:  350px !important;
-  }
+  }  
 
-  /* .btn-primary {
-    border: 0px !important;
-  } */
+  .banner h1 {
+    font-size: 22px;
+  }
  }    
 
  
