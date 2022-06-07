@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "homepage": "https://hotel-application-915ce.web.app/",
+  "homepage": "https://finotel-demo.web.app/",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.3.0",

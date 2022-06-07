@@ -106,7 +106,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="row dashboard-content">
+      <div className="dashboard-content">
       <Tabs defaultActiveKey="1" onChange={onChange}>
     <TabPane tab={`Completed (${completedBookings.length})`} key="completed">
     </TabPane>
@@ -132,9 +132,9 @@ const Dashboard = () => {
           />
         ))}
 
-{!filteredBooking.length &&  <Space size="middle"  className="spinner">
+{!filteredBooking.length &&  <div className="text-center">
   <h3>No Bookings!!</h3>
-          </Space>}
+          </div>}
       </div>
     </>
   );
