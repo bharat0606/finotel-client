@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 import DashboardNav from "../components/DashboardNav";
-import { deleteBooking, userHotelBookings } from "../actions/hotel";
+import { deleteBooking, userHotelBookings, sellerHotels } from "../actions/hotel";
 import BookingCard from "../components/cards/BookingCard";
 
 const { TabPane } = Tabs;
@@ -22,26 +22,33 @@ const Dashboard = () => {
   const [upcomingBookings, setUpcomingBookings] = useState([]);
   const [onGoingBookings, setOnGoingBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hotels, setHotels] = useState([]);
+
 
   useEffect(() => {
     loadUserBookings();
+    loadSellersHotels();
   }, []);
+
+  const loadSellersHotels = async () => {
+    let { data } = await sellerHotels(token);
+    setHotels(data);
+  };
 
   const loadUserBookings = async () => {
     setIsLoading(true)
     const res = await userHotelBookings(token);
     setBooking(res.data);
-
     
 
-    const completedBookings = res.data.filter(row =>moment(row.from).isBefore(moment(new Date()).format("YYYY-MM-DD")))
+    const completedBookings = res.data.filter(row =>moment(moment(row.from).format("YYYY-MM-DD")).isBefore(moment(new Date()).format("YYYY-MM-DD")))
     setCompletedBookings(completedBookings)
     setFilteredBooking(completedBookings);
 
-    const onGoingBookings = res.data.filter(row =>moment(row.from).isSame(moment(new Date()).format("YYYY-MM-DD")))
+    const onGoingBookings = res.data.filter(row =>moment(moment(row.from).format("YYYY-MM-DD")).isSame(moment(new Date()).format("YYYY-MM-DD")))
     setOnGoingBookings(onGoingBookings)
 
-    const upcomingBookings = res.data.filter(row =>moment(row.from).isAfter(moment(new Date()).format("YYYY-MM-DD")))
+    const upcomingBookings = res.data.filter(row =>moment(moment(row.from).format("YYYY-MM-DD")).isAfter(moment(new Date()).format("YYYY-MM-DD")))
     setUpcomingBookings(upcomingBookings)
 
     console.log(upcomingBookings)
@@ -83,7 +90,7 @@ const Dashboard = () => {
       </div>
 
       <div className="container-fluid p-4">
-        <DashboardNav bookingsCount ={booking?.length}/>
+        <DashboardNav bookingsCount ={booking.length} hotelsCount= {hotels.length}/>
       </div>
 
       <div className="container-fluid">
@@ -124,6 +131,10 @@ const Dashboard = () => {
             handleOrderDelete = {handleOrderDelete}
           />
         ))}
+
+{!filteredBooking.length &&  <Space size="middle"  className="spinner">
+  <h3>No Bookings!!</h3>
+          </Space>}
       </div>
     </>
   );

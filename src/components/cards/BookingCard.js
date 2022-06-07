@@ -8,7 +8,6 @@ import OrderModal from "../modals/OrderModal";
 
 const BookingCard = ({orderId, hotel, session, orderedBy,handleOrderDelete,to,from,bed }) => {
   const [showModal, setShowModal] = useState(false);
-  // const [canCancelBooking, setCanCancelBooking] = useState(true);
 
   const cancelBooking = () =>{
     handleOrderDelete(orderId);
@@ -86,7 +85,7 @@ const BookingCard = ({orderId, hotel, session, orderedBy,handleOrderDelete,to,fr
                   Show Booking info
                 </button>
 
-                {moment(from).isAfter(moment(new Date()).format("YYYY-MM-DD")) &&  <button
+                {moment(moment(from).format("YYYY-MM-DD")).isAfter(moment(new Date()).format("YYYY-MM-DD")) &&  <button
                   onClick={cancelBooking}
                   className="btn btn-danger"
                 >

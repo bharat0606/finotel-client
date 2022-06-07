@@ -17,7 +17,7 @@ export const diffDays = (from, to) => {
   const start = new Date(from);
   const end = new Date(to);
   const difference = Math.round(Math.abs((start - end) / day));
-  return difference;
+  return difference + 1;
 };
 
 

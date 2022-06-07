@@ -6,20 +6,27 @@ import { toast } from "react-toastify";
 
 
 import DashboardNav from "../components/DashboardNav";
-import { sellerHotels, deleteHotel } from "../actions/hotel";
+import { sellerHotels, deleteHotel, userHotelBookings } from "../actions/hotel";
 import SmallCard from "../components/cards/SmallCard";
 
 const DashboardSeller = () => {
   const { auth } = useSelector((state) => ({ ...state }));
   const [hotels, setHotels] = useState([]);
+  const [booking, setBooking] = useState([]);
 
   useEffect(() => {
     loadSellersHotels();
+    loadUserBookings();
   }, []);
 
   const loadSellersHotels = async () => {
     let { data } = await sellerHotels(auth.token);
     setHotels(data);
+  };
+
+  const loadUserBookings = async () => {
+    const res = await userHotelBookings(auth.token);
+    setBooking(res.data);
   };
 
   const handleHotelDelete = async (hotelId) => {
@@ -79,7 +86,7 @@ const DashboardSeller = () => {
       </div>
 
       <div className="container-fluid p-4">
-        <DashboardNav />
+        <DashboardNav  bookingsCount ={booking.length} hotelsCount= {hotels.length}/>
       </div>
 
       {auth &&
