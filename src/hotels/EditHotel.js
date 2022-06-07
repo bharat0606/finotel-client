@@ -56,6 +56,9 @@ const EditHotel = ({ match }) => {
     try {
       let res = await updateHotel(token, hotelData, match.params.hotelId);
       toast.success(`${res.data.title} is updated`);
+      setTimeout(() => {
+        window.location.href ='/dashboard/seller'
+      }, 500);
     } catch (err) {
       toast.error(err.response.data.err);
     }
@@ -80,7 +83,7 @@ const EditHotel = ({ match }) => {
             <img
               src={preview}
               alt="preview"
-              className="img img-fluid m-2"
+              className="img img-fluid"
             />
           </div>
           <div className="form-div">

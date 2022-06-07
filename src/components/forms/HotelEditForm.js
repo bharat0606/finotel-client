@@ -26,8 +26,6 @@ const HotelEditForm = ({
 
   return (
     <>
-    {/* { !title && <div>Loading</div>} */}
-
     { title && 
     <form onSubmit={handleSubmit}>
       
@@ -123,7 +121,7 @@ const HotelEditForm = ({
         />
       )}
 
-<Checkbox.Group options={AMENITIES} defaultValue={[...amenitiesString]} onChange={onChange} />
+<Checkbox.Group options={AMENITIES} defaultValue={[...amenitiesString]} onChange={onChange} className="m-2" />
 
       <button className="btn btn-outline-primary m-2">Update</button>
     </form> 

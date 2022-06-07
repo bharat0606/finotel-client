@@ -36,9 +36,45 @@
     margin-right: .1rem;
   }
 
+  .fair-details {
+    background-color: #f5f5f5;
+    padding: 10px;
+    font-size: 16px;
+    margin: 25px 30%;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.2);
+  }
+
+  .fair-title, .fair-footer {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .fair-footer .btn-outline-primary {
+    background-color: #0071c2;
+    color: #fff;
+    border-color: #0071c2;
+  }
+
+  .fair-footer .btn-outline-primary:hover {
+    color: #0071c2;
+    border-color: #0071c2;
+    background-color: #fff;
+  }
+
+  .fair-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
  
 
   @media screen and (max-width: 600px) {
+
+    .fair-details {
+      font-size: 12px;
+       margin: 0px;
+    }
+    
     .cab-search-form {
       margin-top: 15px;
       flex-direction: column !important;

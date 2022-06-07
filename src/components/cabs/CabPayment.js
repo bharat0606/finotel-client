@@ -37,7 +37,7 @@ const CabPayment = ({ match }) => {
 
   const submitOtp = async (otp) => {
     const values = window.sessionStorage.getItem("cabDetails");
-    const { source, destination, distance, fair, time, departureDate } = JSON.parse(values);
+    const { source, destination, distance, fair, time, departureDate,discount } = JSON.parse(values);
 
     let formData = new FormData();
     formData.append("source", source);
@@ -46,6 +46,7 @@ const CabPayment = ({ match }) => {
     formData.append("fair", fair);
     formData.append("time", time);
     formData.append("departureDate", departureDate);
+    formData.append("discount", discount);
 
     try {
       await bookCab(token, formData);

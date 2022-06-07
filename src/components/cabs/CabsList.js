@@ -29,12 +29,17 @@ const COLUMNS = [
       </Tag>
      ),
   },
+
+  {
+    title: 'Discount',
+    dataIndex: 'discount',
+  },  
   {
     title: 'Time',
     dataIndex: 'time',
   },  
   {
-    title: 'Departure Date',
+    title: 'Pick-Up Date',
     dataIndex: 'departureDate',
     render: (departureDate) => moment(departureDate).format("DD-MM-YYYY")
   },  

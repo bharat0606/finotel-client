@@ -108,7 +108,7 @@ const HotelCreateForm = ({
         }
       />
 
-    <Checkbox.Group options={AMENITIES} defaultValue={DEFAULT_SELECTED_AMENITIES} onChange={onChange} />
+    <Checkbox.Group options={AMENITIES} defaultValue={DEFAULT_SELECTED_AMENITIES} onChange={onChange}  className="m-2"/>
 
       <button className="btn btn-outline-primary m-2">Add</button>
     </form>

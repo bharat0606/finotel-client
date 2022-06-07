@@ -297,8 +297,9 @@
 .wrapper {
   /* background-color: yellow; */
   display: flex;
-  justify-content: center;  
+  justify-content: center;
   padding-top: 50px;
+  margin: 25px;
   /* background-image: url(https://media.geeksforgeeks.org/wp-content/uploads/20191212174641/bg1.png);
   background-position: center;
   background-repeat: no-repeat;
@@ -308,6 +309,12 @@
 .wrapper .form-control, .wrapper .ant-select-selector {
   background-color: transparent !important;
   /* color: #fff !important; */
+}
+
+.image-peview {
+  width: 50%;
+  height: 50%;
+  margin-right:10px;
 }
 
 .dashboard-top {
@@ -326,6 +333,12 @@
   .wrapper {
     flex-direction: column;
     padding: 10px 30px;
+  }
+
+  .image-peview {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
   }
 
   .right-nav {

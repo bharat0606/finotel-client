@@ -26,15 +26,13 @@ const SearchResult = () => {
         <br />
         <Search />
       </div>
-      <div className="container">
+      <div className="home-content">
       {isLoading &&  <Space size="middle"  className="spinner">
             <Spin size="large" />
           </Space>}
-        <div className="row">
           {hotels.map((h) => (
             <SmallCard key={h._id} h={h} />
           ))}
-        </div>
         {
           !hotels?.length && !isLoading && <div className="alert alert-danger m-5" role="alert">No Results found!!!</div>
         }

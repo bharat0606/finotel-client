@@ -18,10 +18,8 @@ const { Option } = Select;
 
 const CabForm = () => {
   const history = useHistory()
-  // redux
   const { auth } = useSelector((state) => ({ ...state }));
   const { token } = auth;
-  // state
   const [values, setValues] = useState({
     source: "",
     destination: "",
@@ -29,20 +27,20 @@ const CabForm = () => {
     fair: 0,
     time: moment().format(format),
     departureDate: "",
+    discount: 0
   });
-  const [message, setMessage] = useState('')
+  const [showFairReview, setShowFairReview] = useState(false)
   const [routeId, setRouteId] = useState(0)
   
   // destructuring variables from state
-  const { source, destination, distance, fair,time,departureDate } = values;
+  const { source, destination, distance, fair,time,departureDate, discount } = values;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!auth || !auth?.token) {
       history.push("/login");
       return;
     }
-    
+
     if(values.fair) {
       window.sessionStorage.setItem("cabDetails", JSON.stringify(values));    history.push(`/cabs/payment/${routeId}`);
       return;
@@ -55,6 +53,8 @@ const CabForm = () => {
     formData.append("fair", fair);
     formData.append("time", time);
     formData.append("departureDate", departureDate);
+    formData.append("discount", discount);
+    
 
     try {
       await bookCab(token, formData);
@@ -73,37 +73,27 @@ const CabForm = () => {
         return;
       }
     setValues({ ...values, time: timeString });
-    setMessage("");
+    setShowFairReview(false);
   }
 
   const handleLocationChange = (location, field) => {
         setValues((values)=>{
             return { ...values, [field]: location }
         });
-        setMessage("")
+        setShowFairReview(false)
         
 };
 
 const calculateFair = () => {
-   if(values.destination && values.source) {
+   if(values.destination && values.source && values.departureDate && values.time) {
                 const result = CABS_FAIR_DATA.find(row => row.destionation === values.destination && row.source === values.source)
                 if(result){
                   setRouteId(result.id)
-                    const fair  = DISTANCE_DISCOUNT > result.distance  ? 0 : (result.distance -DISTANCE_DISCOUNT) * result.fairPerKm;
-                    const distance  = result.distance;
-                    let message = `Your total fair is ${currencyFormatter({
-                      amount: fair,
-                      currency: "INR",
-                    })}`
-
-                    message += `&nbsp; Rate per KM - ${result.fairPerKm} Rupees`
-                    message += `&nbsp; Distance is - ${distance} KM`
-
-                    if(!fair) {
-                      message += `&nbsp; You got discount for 25KM`
-                    }
-                      setMessage(message)
-                      setValues({ ...values, fair, distance })
+                    const discount = DISTANCE_DISCOUNT > result.distance  ? result.distance * result.fairPerKm  : DISTANCE_DISCOUNT * result.fairPerKm;
+                    const fair  = result.distance * result.fairPerKm - discount;
+                    const distance  = result.distance;                   
+                    setShowFairReview(true)
+                      setValues({ ...values, fair, distance, discount })
                 }
 
             }
@@ -111,7 +101,7 @@ const calculateFair = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="cab-search-form">
+      <form  className="cab-search-form">
 
 <Select
     className="cab-form w-25"
@@ -133,11 +123,11 @@ const calculateFair = () => {
     <Option key={"Bagru"}>Bagru</Option>
 \        </Select>
 <DatePicker
-  placeholder="Departure Date"
+  placeholder="Pick-Up Date"
   className="w-25"
   onChange={(date, dateString) => {
     setValues({ ...values, departureDate: dateString })
-    setMessage("");
+    setShowFairReview(false);
   }
   }
   disabledDate={(current) =>
@@ -147,11 +137,18 @@ const calculateFair = () => {
   <TimePicker className="time" use12Hours format="h:mm a" onChange={onChange}  value={moment(time, format)}/>               
 <div className="form-group col-md-4">&nbsp; &nbsp;
 <button className="btn btn-outline-primary m-2" type="button" onClick={calculateFair}>Calculate Fair</button>
-<button className="btn btn-outline-primary m-2">Book</button>
  
 </div>
-    </form>
-    {message && <div className="alert alert-primary" role="alert" dangerouslySetInnerHTML={{__html: message}}>
+    </form>    
+    {showFairReview && <div className="fair-details">
+      <div className="fair-title">Review Fair Details</div>
+      <div className="fair-row"><span>Distance</span> <span>{values.distance} KM</span></div>
+      <div className="fair-row"><span>Rate per KM</span> <span>10 Rs</span></div>
+      <div className="fair-row"><span>Discount <small>(for first 25 KM)</small></span> <span>{values.discount} Rs</span></div>
+      <div className="fair-row"><span>Total Fair</span> <span>{values.fair} Rs</span></div>      
+      <div className="fair-footer"><button className="btn btn-outline-primary" type="button" onClick={handleSubmit}>Book</button>
+</div>      
+
     </div>}
     </>
   );
