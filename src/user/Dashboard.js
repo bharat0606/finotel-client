@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
 
+
 import { Link } from "react-router-dom";
 import { Spin, Space, Tabs  } from 'antd';
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import DashboardNav from "../components/DashboardNav";
@@ -13,9 +14,8 @@ import BookingCard from "../components/cards/BookingCard";
 const { TabPane } = Tabs;
 
 const Dashboard = () => {
-  const {
-    auth: { token },
-  } = useSelector((state) => ({ ...state }));
+  const { auth } = useSelector((state) => ({ ...state }));
+
   const [booking, setBooking] = useState([]);
   const [filteredBooking, setFilteredBooking] = useState([]);
   const [completedBookings, setCompletedBookings] = useState([]);
@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [onGoingBookings, setOnGoingBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hotels, setHotels] = useState([]);
+  const dispatch = useDispatch();
 
 
   useEffect(() => {
@@ -31,14 +32,23 @@ const Dashboard = () => {
   }, []);
 
   const loadSellersHotels = async () => {
-    let { data } = await sellerHotels(token);
+    let { data } = await sellerHotels(auth?.token);
     setHotels(data);
   };
 
   const loadUserBookings = async () => {
     setIsLoading(true)
-    const res = await userHotelBookings(token);
+    const res = await userHotelBookings(auth?.token);
     setBooking(res.data);
+
+    if(res.data.length){      
+      dispatch({
+        type: "SHOW_CABS",
+        payload: {showCabs: true},
+      });
+      window.localStorage.setItem("auth", JSON.stringify({ ...auth, ...{ showCabs: true } }))
+    }
+    
     
 
     const completedBookings = res.data.filter(row =>moment(moment(row.from).format("YYYY-MM-DD")).isBefore(moment(new Date()).format("YYYY-MM-DD")))
@@ -59,7 +69,7 @@ const Dashboard = () => {
   const handleOrderDelete = async (orderId) => {
     if (!window.confirm("Are you sure you want to delete?")) return;
     try {
-      deleteBooking(token, orderId).then((res) => {
+      deleteBooking(auth?.token, orderId).then((res) => {
         toast.success("Booking Deleted");
         loadUserBookings();
       });

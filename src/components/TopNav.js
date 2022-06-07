@@ -95,7 +95,7 @@ const TopNav = () => {
               <NavLink className="nav-link" to="/dashboard">
                 <i className="fa fa-dashboard"></i> {!isMobile && 'Dashboard'}
               </NavLink>
-              {auth.hotelCount ? (<NavLink className="nav-link" to="/cabs">
+              {auth.showCabs ? (<NavLink className="nav-link" to="/cabs">
                 <i className="fa fa-cab"></i> {!isMobile && 'Cabs'}
               </NavLink>) : ''}
             </>

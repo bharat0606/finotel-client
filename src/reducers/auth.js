@@ -12,6 +12,8 @@ export const authReducer = (state = userState, action) => {
       return { ...state, ...action.payload };
     case "USER_HOTELS_COUNT":
     return { ...state, ...action.payload };
+    case "SHOW_CABS":
+    return { ...state, ...action.payload };
     case "LOGOUT":
       return action.payload;
     default:
