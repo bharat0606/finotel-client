@@ -19,3 +19,6 @@ export const CABS_FAIR_DATA = [
 ]
 
 export const DISTANCE_DISCOUNT = 25;
+
+export const PICK_UP_LOCATIONS = ['Mansarovar','Sodala'];
+export const DROP_LOCATIONS = ['Mahesh Nagar','Vaishali','Bagru'];

@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 
 import { currencyFormatter } from "../../actions/stripe";
 import { bookCab } from "../../actions/cab";
-import { CABS_FAIR_DATA, DISTANCE_DISCOUNT } from "../../constants";
+import { CABS_FAIR_DATA, DISTANCE_DISCOUNT, DROP_LOCATIONS, PICK_UP_LOCATIONS } from "../../constants";
 
 import  './cabForm.css'
 
@@ -109,8 +109,9 @@ const calculateFair = () => {
     size="large"
     placeholder="Pick-Up"
   >
-    <Option key={"Mansarovar"}>Mansarovar</Option>
-    <Option key={"Sodala"}>Sodala</Option>
+    {PICK_UP_LOCATIONS.map((bed) => (
+            <Option key={bed}>{bed}</Option>
+          ))}
   </Select>
   
   <Select
@@ -118,9 +119,9 @@ const calculateFair = () => {
     onChange = {(value) => {handleLocationChange(value, 'destination')}}
     placeholder="Drop"
   >
-    <Option key={"Mahesh Nagar"}>Mahesh Nagar</Option>
-    <Option key={"Vaishali"}>Vaishali</Option>
-    <Option key={"Bagru"}>Bagru</Option>
+    {DROP_LOCATIONS.map((bed) => (
+            <Option key={bed}>{bed}</Option>
+          ))}
 \        </Select>
 <DatePicker
   placeholder="Pick-Up Date"

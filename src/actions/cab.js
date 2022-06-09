@@ -14,3 +14,11 @@ export const bookCab = async (token, data) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+
+  export const cancelCab = async (token, cabId) =>
+  await axios.delete(`${process.env.REACT_APP_API}/cancel-cab/${cabId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
