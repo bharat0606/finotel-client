@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import queryString from "query-string";
 import { Spin, Space } from 'antd';
 
-
 import Search from "../components/forms/Search";
 import { searchListings } from "../actions/hotel";
 import SmallCard from "../components/cards/SmallCard";
@@ -10,7 +9,7 @@ import SmallCard from "../components/cards/SmallCard";
 const SearchResult = () => { 
   const [hotels, setHotels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // when component mounts, get search params from url and use to send search query to backend
+  
   useEffect(() => {
     const { location, date, bed } = queryString.parse(window.location.search);
     setIsLoading(true)

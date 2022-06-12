@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined,InfoCircleOutlined  } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import moment from "moment";
-
 
 import { diffDays, getDiscountedPrice } from "../../actions/hotel";
 import { currencyFormatter } from "../../actions/stripe";

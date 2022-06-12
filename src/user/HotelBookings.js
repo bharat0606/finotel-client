@@ -39,7 +39,6 @@ const HotelBookings = ({customerView = false, match, history }) => {
       title: 'Rooms',
       dataIndex: 'bed',
     },
-
     {
       title: 'Amount',
       dataIndex: 'session',
@@ -48,6 +47,7 @@ const HotelBookings = ({customerView = false, match, history }) => {
           {session.amount_total}
         </span>
       ),
+      hidden: customerView
     },
     {
       title: 'Check-In',
@@ -75,8 +75,9 @@ const HotelBookings = ({customerView = false, match, history }) => {
           {orderedBy.name}
         </span>
       ),
+      hidden: customerView
     }
-  ]
+  ].filter(item => !item.hidden);
 
   return (
     <>

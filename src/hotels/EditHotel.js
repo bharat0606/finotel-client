@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { DatePicker, Select } from "antd";
+import { useSelector } from "react-redux";
 
 import { read, updateHotel } from "../actions/hotel";
-import { useSelector } from "react-redux";
 import HotelEditForm from "../components/forms/HotelEditForm";
 
 
 const EditHotel = ({ match }) => {
-  // redux
   const { auth } = useSelector((state) => ({ ...state }));
   const { token } = auth;
-  // state
   const [values, setValues] = useState({
     title: "",
     content: "",
@@ -26,7 +23,6 @@ const EditHotel = ({ match }) => {
   const [preview, setPreview] = useState(
     "https://via.placeholder.com/100x100.png?text=PREVIEW"
   );
-  // destructuring variables from state
   const { title, content, price, from, to, bed, location,amenities } = values;
 
   useEffect(() => {

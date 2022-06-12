@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { read, diffDays, isAlreadyBooked, getDiscountedPrice,checkHotelAvailability, getHotelBookings } from "../actions/hotel";
+import { read, diffDays, isAlreadyBooked, getDiscountedPrice, checkHotelAvailability } from "../actions/hotel";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { DatePicker, Select } from "antd";
 
 import { currencyFormatter } from "../actions/stripe";
 import { AMENITIES, BEDS, DATE_YMD } from "../constants";
-import './ViewHotel.css'
 import HotelBookings from "../user/HotelBookings";
+
+import './ViewHotel.css'
 
 const { Option } = Select;
 
@@ -29,12 +30,12 @@ const ViewHotel = ({ match, history }) => {
   }, []);
 
   useEffect(() => {
-    if (auth && auth.token) {
+    if (auth?.token) {
       isAlreadyBooked(auth.token, match.params.hotelId).then((res) => {
         if (res.data.ok) setAlreadyBooked(true);
       });
     }
-  }, []);
+  }, [auth.token, match.params.hotelId]);
 
   const loadSellerHotel = async () => {
     let res = await read(match.params.hotelId);
@@ -54,20 +55,19 @@ const ViewHotel = ({ match, history }) => {
     }
 
     setLoading(true);
-    if (!auth)  { history.push("/login"); return; }
-    
+    if (!auth) { history.push("/login"); return; }
+
     window.sessionStorage.setItem("bookingDetails", JSON.stringify(bookingDetails));
     history.push(`/payment/${hotel._id}`);
   };
 
-  const checkAvailability = () =>{
-    checkHotelAvailability({...bookingDetails, hotelId: hotel._id}).then((res) => {
+  const checkAvailability = () => {
+    checkHotelAvailability({ ...bookingDetails, hotelId: hotel._id }).then((res) => {
       setCanBookHotel(res.data.canBook)
     });
   }
 
-  const checkBookings = async () =>{
-    const res = await getHotelBookings(auth.token, hotel._id);
+  const checkBookings = async () => {
     setShowBookings(!showBookings)
   }
 
@@ -124,12 +124,10 @@ const ViewHotel = ({ match, history }) => {
                 Amenities & Services
               </div>
               <div className="amenities-card-content">
-                {!!amenities.length && AMENITIES.map((row) => {
-                  if (amenities.includes(row.value)) {
-                    return (
-                      <p key={row.value}><i className={row.icon}></i>&nbsp;&nbsp;{row.label}</p>
-                    )
-                  }
+                {!!amenities.length && AMENITIES.filter(row => amenities.includes(row.value)).map((row) => {
+                  return (
+                    <p key={row.value}><i className={row.icon}></i>&nbsp;&nbsp;{row.label}</p>
+                  )
                 })}
               </div>
               <div className="amenities-card-footer">
@@ -185,10 +183,10 @@ const ViewHotel = ({ match, history }) => {
             </div>
           </div>
 
-          { !alreadyBooked && auth && auth?.user?._id !== hotel?.postedBy?._id && <div className="hotel-customize-column">
+          {!alreadyBooked && auth && auth?.user?._id !== hotel?.postedBy?._id && <div className="hotel-customize-column">
             <div className="hotel-detail-card customize-booking">
               <div className="customize-booking-header">
-                 Select Booking Details <small style={{color:'red'}}>(Mandatory) {canBookHotel && 'can book'}</small>
+                Select Booking Details <small style={{ color: 'red' }}>(Mandatory) {canBookHotel && 'can book'}</small>
               </div>
               <div className="customize-booking-content">
                 <Select
@@ -200,48 +198,46 @@ const ViewHotel = ({ match, history }) => {
                   size="large"
                   placeholder="Number of rooms"
                 >
-
-                  {BEDS.map((bed) => {
-                    if(hotel.bed >= bed) {
-                      return (<Option key={bed}>{bed}</Option>)
-                    }                   
-                  })}
+                  {BEDS
+                  .filter(bed => hotel.bed >= bed)
+                  .map((bed) => <Option key={bed}>{bed}</Option>)}
                 </Select>
 
                 {hotel.from && (
-                <DatePicker
-                  placeholder="Check-in"
-                  className="form-control m-2"
-                onChange={(date, dateString) =>
-                   {  
-                     setBookingDetails({ ...bookingDetails, from: moment(dateString).format(DATE_YMD) })
-                     setCanBookHotel(false) }
-                }
-                disabledDate={(current) =>
-                  {   
-                    return (current && (current.valueOf() < moment().subtract(1, "days") || current.valueOf() > moment(hotel.to).add(1, "days"))) }
-                }
-                
-                />
-              )}
+                  <DatePicker
+                    placeholder="Check-in"
+                    className="form-control m-2"
+                    onChange={(date, dateString) => {
+                      setBookingDetails({ ...bookingDetails, from: moment(dateString).format(DATE_YMD) })
+                      setCanBookHotel(false)
+                    }
+                    }
+                    disabledDate={(current) => {
+                      return (current && (current.valueOf() < moment().subtract(1, "days") || current.valueOf() > moment(hotel.to).add(1, "days")))
+                    }
+                    }
 
-              {hotel.to && (
-                <DatePicker
-                  placeholder="Check-out"
-                  className="form-control m-2"
-                  onChange={(date, dateString) =>
-                   {setBookingDetails({ ...bookingDetails, to: moment(dateString).format(DATE_YMD) })
-                   setCanBookHotel(false)}
-                }
-                disabledDate={(current) =>
-                  {   
-                    return current && current.valueOf() > moment(hotel.to).add(1, "days") }
-                }
-                />
-              )}
+                  />
+                )}
+
+                {hotel.to && (
+                  <DatePicker
+                    placeholder="Check-out"
+                    className="form-control m-2"
+                    onChange={(date, dateString) => {
+                      setBookingDetails({ ...bookingDetails, to: moment(dateString).format(DATE_YMD) })
+                      setCanBookHotel(false)
+                    }
+                    }
+                    disabledDate={(current) => {
+                      return current && current.valueOf() > moment(hotel.to).add(1, "days")
+                    }
+                    }
+                  />
+                )}
               </div>
               <div className="customize-booking-footer">
-              <button
+                <button
                   className="btn btn-block btn-lg btn-primary mt-3"
                   onClick={checkAvailability}
                 >
@@ -252,11 +248,11 @@ const ViewHotel = ({ match, history }) => {
                   className="btn btn-block btn-lg btn-primary mt-3"
                   onClick={checkBookings}
                 >
-                  Check Bookings
+                  {showBookings ? 'Hide' : 'Show'} Bookings
                 </button>
               </div>
               {showBookings && <div>
-                <HotelBookings match={match} customerView={true}/>
+                <HotelBookings match={match} customerView={true} />
               </div>}
             </div>
           </div>}

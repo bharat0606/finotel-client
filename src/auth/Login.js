@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { login } from "../actions/auth";
 import LoginForm from "../components/LoginForm";
 import { useDispatch } from "react-redux";
-import { userHotelBookings, getCompletedOrdersCount } from "../actions/hotel";
+import { getCompletedOrdersCount } from "../actions/hotel";
 import loginWallper from '../assets/login-backg.jpg'
 
 import "./Login.css"

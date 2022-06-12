@@ -1,4 +1,4 @@
-import { useHistory, NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 const LoginForm = ({
   handleSubmit,
@@ -7,7 +7,6 @@ const LoginForm = ({
   password,
   setPassword,
 }) => {
-  const history = useHistory()
   return (
       <div className="frame">
         <div style={{
@@ -16,7 +15,6 @@ const LoginForm = ({
           width: '100%',
           height: '100%', zIndex: -1
         }}>
-
         </div>
         <div className="nav">
           <ul className="links">

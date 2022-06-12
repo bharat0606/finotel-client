@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Card } from "antd";
 import moment from "moment";
+
 import { getNameInitials } from "../helper";
 
-const { Meta } = Card;
 
 const TopNav = () => {
   const [isMobile, setIsMobile] = useState(false)
