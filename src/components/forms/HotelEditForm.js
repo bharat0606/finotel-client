@@ -2,7 +2,7 @@ import AlgoliaPlaces from "algolia-places-react";
 import { Checkbox, DatePicker, Select } from "antd";
 import moment from "moment";
 
-import { AMENITIES, BEDS } from "../../constants";
+import { AMENITIES, BEDS, DATE_YMD } from "../../constants";
 
 const { Option } = Select;
 
@@ -95,7 +95,7 @@ const HotelEditForm = ({
 
       {from && (
         <DatePicker
-          defaultValue={moment(from, "YYYY-MM-DD")}
+          defaultValue={moment(from, DATE_YMD)}
           placeholder="From date"
           className="form-control m-2"
           onChange={(date, dateString) =>
@@ -109,7 +109,7 @@ const HotelEditForm = ({
 
       {to && (
         <DatePicker
-          defaultValue={moment(to, "YYYY-MM-DD")}
+          defaultValue={moment(to, DATE_YMD)}
           placeholder="To date"
           className="form-control m-2"
           onChange={(date, dateString) =>

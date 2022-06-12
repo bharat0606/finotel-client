@@ -23,13 +23,17 @@ export const diffDays = (from, to) => {
 
 export const getDiscountedPrice = (price) => {
   const discountPercentage = 10;
+  let discount = 0;
   let discountPrice = price;
   if(price > 0) {
     discountPrice = (price * (100 - discountPercentage))/100;
+    discount = (price * discountPercentage)/100;
   }
 
-  return discountPrice;
+  return {price: discountPrice, discount:discount};
 };
+
+
 
 export const sellerHotels = async (token) =>
   await axios.get(`${process.env.REACT_APP_API}/seller-hotels`, {
@@ -83,8 +87,8 @@ export const searchListings = async (query) =>
 
  
 
-export const bookHotel = async (token, hotelId, amount, bookingDetails) =>
-  await axios.post(`${process.env.REACT_APP_API}/book-hotel`,{hotelId, amount, bookingDetails}, {
+export const bookHotel = async (token, hotelId, amount, discount, bookingDetails) =>
+  await axios.post(`${process.env.REACT_APP_API}/book-hotel`,{hotelId, amount,discount, bookingDetails}, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { read, diffDays, isAlreadyBooked, getDiscountedPrice,checkHotelAvailability } from "../actions/hotel";
+import { read, diffDays, isAlreadyBooked, getDiscountedPrice,checkHotelAvailability, getHotelBookings } from "../actions/hotel";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { DatePicker, Select } from "antd";
 
-
 import { currencyFormatter } from "../actions/stripe";
-import { AMENITIES, BEDS } from "../constants";
+import { AMENITIES, BEDS, DATE_YMD } from "../constants";
 import './ViewHotel.css'
+import HotelBookings from "../user/HotelBookings";
 
 const { Option } = Select;
 
@@ -20,6 +20,7 @@ const ViewHotel = ({ match, history }) => {
   const [loading, setLoading] = useState(false);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
   const [canBookHotel, setCanBookHotel] = useState(false);
+  const [showBookings, setShowBookings] = useState(false);
 
   const { auth } = useSelector((state) => ({ ...state }));
 
@@ -60,10 +61,14 @@ const ViewHotel = ({ match, history }) => {
   };
 
   const checkAvailability = () =>{
-    // setCanBookHotel
     checkHotelAvailability({...bookingDetails, hotelId: hotel._id}).then((res) => {
       setCanBookHotel(res.data.canBook)
     });
+  }
+
+  const checkBookings = async () =>{
+    const res = await getHotelBookings(auth.token, hotel._id);
+    setShowBookings(!showBookings)
   }
 
   return (
@@ -85,7 +90,7 @@ const ViewHotel = ({ match, history }) => {
                 &nbsp;
                 <b>
                   {currencyFormatter({
-                    amount: getDiscountedPrice(hotel.price) || 0,
+                    amount: getDiscountedPrice(hotel.price)?.price || 0,
                     currency: "INR",
                   })}
 
@@ -187,7 +192,10 @@ const ViewHotel = ({ match, history }) => {
               </div>
               <div className="customize-booking-content">
                 <Select
-                  onChange={(value) => setBookingDetails({ ...bookingDetails, bed: value })}
+                  onChange={(value) => {
+                    setBookingDetails({ ...bookingDetails, bed: value })
+                    setCanBookHotel(false)
+                  }}
                   className="w-100 m-2"
                   size="large"
                   placeholder="Number of rooms"
@@ -206,7 +214,8 @@ const ViewHotel = ({ match, history }) => {
                   className="form-control m-2"
                 onChange={(date, dateString) =>
                    {  
-                     setBookingDetails({ ...bookingDetails, from: dateString }) }
+                     setBookingDetails({ ...bookingDetails, from: moment(dateString).format(DATE_YMD) })
+                     setCanBookHotel(false) }
                 }
                 disabledDate={(current) =>
                   {   
@@ -221,7 +230,8 @@ const ViewHotel = ({ match, history }) => {
                   placeholder="Check-out"
                   className="form-control m-2"
                   onChange={(date, dateString) =>
-                  setBookingDetails({ ...bookingDetails, to: dateString })
+                   {setBookingDetails({ ...bookingDetails, to: moment(dateString).format(DATE_YMD) })
+                   setCanBookHotel(false)}
                 }
                 disabledDate={(current) =>
                   {   
@@ -237,7 +247,17 @@ const ViewHotel = ({ match, history }) => {
                 >
                   See Availability
                 </button>
+                &nbsp;
+                <button
+                  className="btn btn-block btn-lg btn-primary mt-3"
+                  onClick={checkBookings}
+                >
+                  Check Bookings
+                </button>
               </div>
+              {showBookings && <div>
+                <HotelBookings match={match} customerView={true}/>
+              </div>}
             </div>
           </div>}
         </div>

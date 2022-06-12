@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined,InfoCircleOutlined  } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import moment from "moment";
+
 
 import { diffDays, getDiscountedPrice } from "../../actions/hotel";
 import { currencyFormatter } from "../../actions/stripe";
+import { DATE_WITH_MONTH } from "../../constants";
 
 const SmallCard = ({
   h,
@@ -56,7 +59,7 @@ const SmallCard = ({
                 </span></s>
                 <b>&nbsp;
                 {currencyFormatter({
-                    amount: getDiscountedPrice(h.price) || 0,
+                    amount: getDiscountedPrice(h.price)?.price || 0,
                     currency: "INR",
                   })}
                 </b>
@@ -80,7 +83,7 @@ const SmallCard = ({
                 </span>
               </p>
               <p className="card-text">
-                Available {h.bed} rooms from {new Date(h.from).toLocaleDateString()}
+                Available {h.bed} rooms from {moment(new Date(h.from)).format(DATE_WITH_MONTH)} to {moment(new Date(h.to)).format(DATE_WITH_MONTH)}
               </p>
             </div>
           </div>

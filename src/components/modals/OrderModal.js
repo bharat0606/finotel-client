@@ -2,6 +2,7 @@ import { Modal } from "antd";
 import moment from "moment";
 
 import { currencyFormatter } from "../../actions/stripe";
+import { DATE_WITH_MONTH } from "../../constants";
 
 const OrderModal = ({ session, orderedBy, showModal, setShowModal,to,from,bed }) => {
   return (
@@ -11,17 +12,23 @@ const OrderModal = ({ session, orderedBy, showModal, setShowModal,to,from,bed })
       onCancel={() => setShowModal(!showModal)}
 
     >
-      <p>Rooms: {bed}</p>
-      <p>From: {moment(from).format("Do MMMM YYYY")}</p>
-      <p>To: {moment(to).format("Do MMMM YYYY")}</p>
-      <p>Payment status: {session.payment_status}</p>
+      <p><b>Rooms:</b> {bed}</p>
+      <p><b>From:</b> {moment(from).format(DATE_WITH_MONTH)}</p>
+      <p><b>To:</b> {moment(to).format(DATE_WITH_MONTH)}</p>
+      <p><b>Payment status:</b> {session.payment_status}</p>
       <p>
-        Amount total: { currencyFormatter({
-                    amount: session.amount_total || 0,
+      <b>Amount:</b> { currencyFormatter({
+                    amount: session.amount_total,
                     currency: session.currency.toUpperCase(),
                   })}
       </p>
-      <p>Customer: {orderedBy.name}</p>
+      <p>
+      <b>Discount:</b> { currencyFormatter({
+                    amount: session.discount,
+                    currency: session.currency.toUpperCase(),
+                  })}
+      </p>
+      <p><b>Customer:</b> {orderedBy.name}</p>
     </Modal>
   );
 };

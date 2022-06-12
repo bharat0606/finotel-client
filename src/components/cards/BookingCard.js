@@ -5,6 +5,7 @@ import moment from "moment";
 import { currencyFormatter } from "../../actions/stripe";
 import { diffDays } from "../../actions/hotel";
 import OrderModal from "../modals/OrderModal";
+import { DATE_YMD,DATE_WITH_MONTH } from "../../constants";
 
 const BookingCard = ({orderId, hotel, session, orderedBy,handleOrderDelete,to,from,bed }) => {
   const [showModal, setShowModal] = useState(false);
@@ -61,7 +62,7 @@ const BookingCard = ({orderId, hotel, session, orderedBy,handleOrderDelete,to,fr
               </p>
               { bed &&
                    <p className="card-text">
-                   Booked {bed} rooms from {new Date(from).toLocaleDateString()}
+                   Booked {bed} rooms from {moment(new Date(from)).format(DATE_WITH_MONTH)} to {moment(new Date(to)).format(DATE_WITH_MONTH)}
                  </p>
                 }
 
@@ -85,7 +86,7 @@ const BookingCard = ({orderId, hotel, session, orderedBy,handleOrderDelete,to,fr
                   Show Booking info
                 </button>
 
-                {moment(moment(from).format("YYYY-MM-DD")).isAfter(moment(new Date()).format("YYYY-MM-DD")) &&  <button
+                {moment(moment(from).format(DATE_YMD)).isAfter(moment(new Date()).format(DATE_YMD)) &&  <button
                   onClick={cancelBooking}
                   className="btn btn-danger"
                 >

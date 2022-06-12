@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { Spin, Space, Table } from 'antd';
 import { ArrowLeftOutlined } from "@ant-design/icons";
-
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import moment from "moment";
 
-import { deleteBooking, getHotelBookings } from "../actions/hotel";
+import { getHotelBookings } from "../actions/hotel";
+import { DATE_WITH_MONTH, DATE_YMD } from "../constants";
 
-const HotelBookings = ({ match, history }) => {
+const HotelBookings = ({customerView = false, match, history }) => {
   const {
     auth: { token },
   } = useSelector((state) => ({ ...state }));
@@ -22,7 +21,12 @@ const HotelBookings = ({ match, history }) => {
   const loadUserBookings = async () => {
     setIsLoading(true)
     const res = await getHotelBookings(token, match.params.hotelId);
-    setBooking(res.data);
+    if(customerView) {
+      const filterData = res.data.filter(row =>moment(moment(row.to).format(DATE_YMD)).isSameOrAfter(moment(new Date()).format(DATE_YMD)))
+      setBooking(filterData);
+    } else {
+      setBooking(res.data);
+    }    
     setIsLoading(false)
   };
 
@@ -50,7 +54,7 @@ const HotelBookings = ({ match, history }) => {
       dataIndex: 'from',
       render: (from) => (
         <span>
-          {moment(new Date(from)).format("Do MMMM YYYY")}
+          {moment(new Date(from)).format(DATE_WITH_MONTH)}
         </span>
       ),
     },
@@ -59,7 +63,7 @@ const HotelBookings = ({ match, history }) => {
       dataIndex: 'to',
       render: (to) => (
         <span>
-          {moment(new Date(to)).format("Do MMMM YYYY")}
+          {moment(new Date(to)).format(DATE_WITH_MONTH)}
         </span>
       ),
     },
@@ -74,32 +78,19 @@ const HotelBookings = ({ match, history }) => {
     }
   ]
 
-  const handleOrderDelete = async (orderId) => {
-    if (!window.confirm("Are you sure you want to delete?")) return;
-    try {
-      deleteBooking(token, orderId).then((res) => {
-        toast.success("Booking Deleted");
-        loadUserBookings();
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-  };
-
   return (
     <>
-      <div className="container-fluid bg-secondary p-5 nav-banner">
-      </div>
+      {!customerView && <div className="container-fluid bg-secondary p-5 nav-banner">
+      </div>}
 
       <div className="dashboard-content">
-        <button className="go-back" onClick={goBack}>
+        {!customerView && <button className="go-back" onClick={goBack}>
           <span>
           <ArrowLeftOutlined />
 
           </span>
           <span>Go Back</span>
-          </button>
+          </button>}
         {isLoading && <Space size="middle" className="spinner">
           <Spin size="large" />
         </Space>}

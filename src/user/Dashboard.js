@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import DashboardNav from "../components/DashboardNav";
 import { deleteBooking, userHotelBookings, sellerHotels } from "../actions/hotel";
 import BookingCard from "../components/cards/BookingCard";
+import { DATE_YMD } from "../constants";
 
 const { TabPane } = Tabs;
 
@@ -51,14 +52,20 @@ const Dashboard = () => {
     
     
 
-    const completedBookings = res.data.filter(row =>moment(moment(row.from).format("YYYY-MM-DD")).isBefore(moment(new Date()).format("YYYY-MM-DD")))
+    const completedBookings = res.data.filter(row =>moment(moment(row.to).format(DATE_YMD)).isBefore(moment(new Date()).format(DATE_YMD)))
     setCompletedBookings(completedBookings)
     setFilteredBooking(completedBookings);
 
-    const onGoingBookings = res.data.filter(row =>moment(moment(row.from).format("YYYY-MM-DD")).isSame(moment(new Date()).format("YYYY-MM-DD")))
+    const onGoingBookings = res.data.filter(row =>{      
+      //  from <= current &&  to >= current
+      const fromDate = moment(row.from).format(DATE_YMD);
+      const toDate = moment(row.to).format(DATE_YMD);
+      const currentDate = moment(new Date()).format(DATE_YMD);
+      return moment(fromDate).isSameOrBefore(currentDate) &&  moment(toDate).isSameOrAfter(currentDate)
+    })
     setOnGoingBookings(onGoingBookings)
 
-    const upcomingBookings = res.data.filter(row =>moment(moment(row.from).format("YYYY-MM-DD")).isAfter(moment(new Date()).format("YYYY-MM-DD")))
+    const upcomingBookings = res.data.filter(row =>moment(moment(row.from).format(DATE_YMD)).isAfter(moment(new Date()).format(DATE_YMD)))
     setUpcomingBookings(upcomingBookings)
 
     console.log(upcomingBookings)
@@ -81,14 +88,11 @@ const Dashboard = () => {
 
   const onChange = (key) => {
     if(key === 'completed') {
-      // const filteredData = booking.filter(row =>moment(row.from).isBefore(moment(new Date()).format("YYYY-MM-DD")))
       setFilteredBooking(completedBookings)
     } else if(key === 'going') {
-      // const filteredData = booking.filter(row =>moment(row.from).isSame(moment(new Date()).format("YYYY-MM-DD")))
       setFilteredBooking(onGoingBookings)
     }
     else if(key === 'upcoming') {
-      // const filteredData = booking.filter(row =>moment(row.from).isAfter(moment(new Date()).format("YYYY-MM-DD")))
       setFilteredBooking(upcomingBookings)
     }
     

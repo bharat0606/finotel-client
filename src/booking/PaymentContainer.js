@@ -12,6 +12,7 @@ const PaymentContainer = ({ match, type = "hotelBooking" }) => {
   const hunel = new HunelCreditCard();
   const [hotel, setHotel] = useState({});
   const [finalAmount, setFinalAmount] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [showOtp, setShowOtp] = useState(false);
 
 
@@ -28,11 +29,15 @@ const PaymentContainer = ({ match, type = "hotelBooking" }) => {
     if (res?.data && window.sessionStorage.getItem("bookingDetails")) {
       bookingDetails = JSON.parse(window.sessionStorage.getItem("bookingDetails"));
       let priceToPaid =  res.data.price;
+      let discount = 0;
       const days  = diffDays(bookingDetails.from, bookingDetails.to)
       if(auth?.hotelCount) {
-        priceToPaid = getDiscountedPrice(res.data.price);
+        const priceInfo = getDiscountedPrice(res.data.price);
+        priceToPaid = priceInfo?.price;
+        discount = priceInfo?.discount;
       }
-      setFinalAmount(parseInt(bookingDetails.bed) * priceToPaid * days)
+      setFinalAmount(parseInt(bookingDetails.bed) * priceToPaid * days);
+      setDiscount(parseInt(bookingDetails.bed) * discount * days);
     }
   };
 
@@ -43,7 +48,7 @@ const PaymentContainer = ({ match, type = "hotelBooking" }) => {
   const submitOtp = async (otp) => {
     try {
       const bookingDetails = window.sessionStorage.getItem("bookingDetails");
-      await bookHotel(auth.token, hotel._id, finalAmount, bookingDetails);
+      await bookHotel(auth.token, hotel._id, finalAmount, discount,bookingDetails);
       toast.success("Hotel is booked");
       // window.localStorage.setItem("auth", JSON.stringify({ ...auth, ...{ hotelCount: ((auth.hotelCount || 0) + 1) } }));
       setTimeout(() => {

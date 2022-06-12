@@ -6,6 +6,7 @@ import { DeleteOutlined  } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import { allBookedCabs,cancelCab } from '../../actions/cab';
+import { DATE_YMD } from "../../constants";
 
 const CabsList = () =>{
 
@@ -77,9 +78,9 @@ const CabsList = () =>{
   const cancelCabBooking = (row) =>{
     let canCancel = false ;
 
-    if(moment(moment(row.departureDate).format("YYYY-MM-DD")).isBefore(moment(new Date()).format("YYYY-MM-DD"))) {
+    if(moment(moment(row.departureDate).format(DATE_YMD)).isBefore(moment(new Date()).format(DATE_YMD))) {
       toast.error("Past bookings can not be cancelled");      
-    } else if(moment(moment(row.departureDate).format("YYYY-MM-DD")).isAfter(moment(new Date()).format("YYYY-MM-DD"))) {
+    } else if(moment(moment(row.departureDate).format(DATE_YMD)).isAfter(moment(new Date()).format(DATE_YMD))) {
       canCancel = true; 
     } else {
     const currentTime = moment(moment().format('h:mma'), 'h:mma');

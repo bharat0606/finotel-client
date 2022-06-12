@@ -1,3 +1,5 @@
+export const DATE_WITH_MONTH = "Do MMMM YYYY"
+export const DATE_YMD = "YYYY-MM-DD"
 export const BEDS = [1,2,3,4]
 
 export const AMENITIES = [
