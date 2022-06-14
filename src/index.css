@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+.app-content {
+  min-height: 80vh;
+}
+
 .pointer {
   cursor: pointer;
 }

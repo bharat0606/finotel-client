@@ -21,6 +21,7 @@ import PaymentContainer from "./booking/PaymentContainer";
 import CabContainer from "./components/cabs/CabContainer"
 import CabPayment from "./components/cabs/CabPayment";
 import HotelBookings from "./user/HotelBookings";
+import FooterNav from "./components/Footer";
 
 
 
@@ -33,6 +34,7 @@ function App() {
   return (
     <BrowserRouter>
       <TopNav />    
+      <div className="app-content">
       <ToastContainer position="top-center" />
       <Switch>
         <Route exact path="/" component={Home} />
@@ -53,6 +55,9 @@ function App() {
         <PrivateRoute exact path="/cabs/payment/:id" component={CabPayment} />
         <PrivateRoute exact path="/booking-details/:hotelId" component={HotelBookings} />
       </Switch>
+      </div>
+
+      <FooterNav/>
     </BrowserRouter>
   );
 }

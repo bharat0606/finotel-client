@@ -95,7 +95,7 @@ const CabsList = () =>{
     if(canCancel) {
       try {
         cancelCab(auth?.token, row._id).then((res) => {
-          toast.success("Cab Booking Cancelled");
+          toast.success("Cab Booking Cancelled !!, Your refund will be credited your account in 24 hours");
           loadAllBookedCabs();
         });
       } catch (err) {

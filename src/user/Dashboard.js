@@ -77,7 +77,7 @@ const Dashboard = () => {
     if (!window.confirm("Are you sure you want to delete?")) return;
     try {
       deleteBooking(auth?.token, orderId).then((res) => {
-        toast.success("Booking Deleted");
+        toast.success("Booking Cancelled !!, Your refund will be credited your account in 24 hours");
         loadUserBookings();
       });
     } catch (err) {
